@@ -49,6 +49,14 @@ for paper in href_list:
     # https://arxiv.org/pdf/2109.10905
     # https://arxiv.org/pdf/arXiv:2203.10046
     result = re.search(r"/pdf/\D*(.+)$", paper)
+    if result is None:
+        # this regex searches for e.g.
+        # https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PUBNOTES/ATL-PHYS-PUB-2022-018/ATL-PHYS-PUB-2022-018.pdf
+        # https://www.slac.stanford.edu/~mpeskin/Snowmass2021/BelleIIPhysicsforSnowmass.pdf
+        result = re.search(r"(?<=/)([^/]*)(?=\.pdf)", paper)
+
+    # there could be other patterns but
+    # I'm not inclined to try to match them all
     try:
         #print (result.group(1))
         paper_name = result.group(1) + '.pdf'

@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import re
-import sys
+from pathlib import Path
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0'
@@ -43,7 +43,6 @@ with open(paper_list_file_name, 'w', encoding='utf-8') as f:
         print(paper, file=f)
 
 # download all the papers
-#p = re.compile('/pdf/(.+)$')
 for paper in href_list:
     # this regex searches for 
     # https://arxiv.org/pdf/2109.10905
@@ -59,6 +58,14 @@ for paper in href_list:
     # I'm not inclined to try to match them all
     try:
         #print (result.group(1))
-        paper_name = result.group(1) + '.pdf'
+        paper_name = os.path.join(FRONTIER, result.group(1) + '.pdf')
     except:
         print ("Could not download ", paper)
+
+    # only download the paper if it's not already present
+    # I suppose papers could change
+    # but TOO BAD
+    if not Path(paper_name).exists():
+        r = requests.get(paper)
+        with open(paper_name, 'wb') as f:
+            f.write(r.content)

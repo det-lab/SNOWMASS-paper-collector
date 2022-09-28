@@ -8,8 +8,18 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0'
 }
 
+#FRONTIER = "ef"
+#FRONTIER = 'nf'
+#FRONTIER = 'rf'
+#FRONTIER = 'cf'
+#FRONTIER = 'tf'
+#FRONTIER = 'af'
+#FRONTIER = 'if'
+#FRONTIER = 'compf'
+#FRONTIER = 'uf'
+FRONTIER = 'cef' 
+
 BASE_URL = "https://snowmass21.org/submissions/"
-FRONTIER = "ef"
 URL = BASE_URL + FRONTIER
 page = requests.get(URL, headers=headers)
 soup = BeautifulSoup(page.content, 'html.parser')
@@ -65,7 +75,9 @@ for paper in href_list:
     # only download the paper if it's not already present
     # I suppose papers could change
     # but TOO BAD
+    #"""
     if not Path(paper_name).exists():
         r = requests.get(paper)
         with open(paper_name, 'wb') as f:
             f.write(r.content)
+    #"""
